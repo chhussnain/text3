@@ -1,16 +1,12 @@
 import streamlit as st
-from textblob import TextBlob
+from transformers import pipeline
+
+# Load pre-trained sentiment analysis model
+classifier = pipeline("sentiment-analysis")
 
 def predict_sentiment(text):
-    analysis = TextBlob(text)
-    polarity = analysis.sentiment.polarity
-
-    if polarity > 0:
-        return "Positive"
-    elif polarity < 0:
-        return "Negative"
-    else:
-        return "Neutral"
+    result = classifier(text)
+    return result[0]
 
 def main():
     st.title("Sentiment Analysis App")
@@ -21,12 +17,13 @@ def main():
     if st.button("Predict"):
         if text_input:
             prediction = predict_sentiment(text_input)
-            st.write(f"Sentiment: {prediction}")
+            st.write(f"Sentiment: {prediction['label']} with confidence: {prediction['score']:.4f}")
         else:
             st.warning("Please enter some text.")
 
 if __name__ == "__main__":
     main()
+
 
 
 
