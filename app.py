@@ -1,22 +1,19 @@
 import streamlit as st
-
-positive_words = ["happy", "good", "excellent", "positive", "awesome"]
-negative_words = ["sad", "bad", "terrible", "negative", "awful"]
+from textblob import TextBlob
 
 def predict_sentiment(text):
-    words = text.lower().split()
-    positive_count = sum(word in positive_words for word in words)
-    negative_count = sum(word in negative_words for word in words)
+    analysis = TextBlob(text)
+    polarity = analysis.sentiment.polarity
 
-    if positive_count > negative_count:
+    if polarity > 0:
         return "Positive"
-    elif negative_count > positive_count:
+    elif polarity < 0:
         return "Negative"
     else:
         return "Neutral"
 
 def main():
-    st.title("Simple Sentiment Analysis App")
+    st.title("Sentiment Analysis App")
 
     # User input
     text_input = st.text_area("Enter text for sentiment analysis:")
@@ -30,5 +27,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
